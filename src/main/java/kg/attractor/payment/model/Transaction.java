@@ -1,13 +1,15 @@
 package kg.attractor.payment.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
     private Long id;
     private Long senderId;
