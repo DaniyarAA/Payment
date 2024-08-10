@@ -22,9 +22,14 @@ public class AccountDao {
     }
 
     public Optional<Account> getByAccountNumber(String accountNumber) {
-        String sql = "SELECT balance FROM accounts WHERE account_number = ?";
+        String sql = "SELECT * FROM accounts WHERE account_number = ?";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Account.class),accountNumber))
         );
+    }
+
+    public void updateAccount(Account account) {
+        String sql = "UPDATE accounts SET balance = ? WHERE id = ?";
+        jdbcTemplate.update(sql, account.getBalance(), account.getId());
     }
 }

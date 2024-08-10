@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -26,8 +28,9 @@ public class AccountController {
     }
 
     @PostMapping("/balance")
-    public ResponseEntity<?> addBalance(@RequestParam Long accountId) {
-        return ResponseEntity.status(HttpStatus.OK).body("Balance...");
+    public ResponseEntity<?> addBalance(@RequestParam String accountNumber, @RequestParam BigDecimal money) {
+        accountService.addBalance(accountNumber, money);
+        return ResponseEntity.status(HttpStatus.OK).body("Balance updated successfully");
     }
 
 

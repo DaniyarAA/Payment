@@ -24,26 +24,50 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void createAccount(String currency) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Account account = Account.builder()
                 .accountNumber(generateAccountNumber())
-                .userId(userDao.getUserByPhoneNumber(auth.getName()).orElseThrow(
-                        () -> new NotFoundUserException("User not found")
-                ).getId())
+                .userId(getCurrentUserId())
                 .currency(currency)
                 .balance(BigDecimal.ZERO)
                 .build();
         accountDao.createAccount(account);
     }
 
-    public String generateAccountNumber() {
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 20).toUpperCase();
-    }
 
     @Override
     public BigDecimal getBalance(String accountNumber){
         Account account = accountDao.getByAccountNumber(accountNumber)
                 .orElseThrow(() -> new NotFoundAccountException("Account not found"));
         return account.getBalance();
+    }
+
+
+    @Override
+    public void addBalance(String accountNumber, BigDecimal money){
+        if (money.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
+
+        Account account = accountDao.getByAccountNumber(accountNumber)
+                .orElseThrow(() -> new NotFoundAccountException("Account not found"));
+
+        if (!account.getUserId().equals(getCurrentUserId())) {
+            throw new IllegalArgumentException("You cannot deposit to someone else's account");
+        }
+
+        account.setBalance(account.getBalance().add(money));
+        accountDao.updateAccount(account);
+    }
+
+
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userDao.getUserByPhoneNumber(auth.getName()).orElseThrow(
+                () -> new NotFoundUserException("User not found")
+        ).getId();
+    }
+
+    public String generateAccountNumber() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 20).toUpperCase();
     }
 }
