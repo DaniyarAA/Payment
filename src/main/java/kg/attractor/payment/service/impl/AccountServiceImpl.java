@@ -2,9 +2,9 @@ package kg.attractor.payment.service.impl;
 
 import kg.attractor.payment.dao.AccountDao;
 import kg.attractor.payment.dao.UserDao;
+import kg.attractor.payment.errors.NotFoundAccountException;
 import kg.attractor.payment.errors.NotFoundUserException;
 import kg.attractor.payment.model.Account;
-import kg.attractor.payment.model.User;
 import kg.attractor.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,5 +38,12 @@ public class AccountServiceImpl implements AccountService {
 
     public String generateAccountNumber() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 20).toUpperCase();
+    }
+
+    @Override
+    public BigDecimal getBalance(String accountNumber){
+        Account account = accountDao.getByAccountNumber(accountNumber)
+                .orElseThrow(() -> new NotFoundAccountException("Account not found"));
+        return account.getBalance();
     }
 }

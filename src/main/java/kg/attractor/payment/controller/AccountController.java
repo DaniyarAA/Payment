@@ -21,8 +21,8 @@ public class AccountController {
     }
 
     @GetMapping("/balance")
-    public ResponseEntity<?> getBalance(@RequestParam Long accountId) {
-        return ResponseEntity.status(HttpStatus.OK).body("Balance...");
+    public ResponseEntity<?> getBalance(@RequestParam String accountNumber) {
+        return ResponseEntity.status(HttpStatus.OK).body(accountService.getBalance(accountNumber));
     }
 
     @PostMapping("/balance")
