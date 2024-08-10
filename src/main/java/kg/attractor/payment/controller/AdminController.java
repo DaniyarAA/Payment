@@ -1,18 +1,23 @@
 package kg.attractor.payment.controller;
 
 
+import kg.attractor.payment.dto.TransactionDto;
+import kg.attractor.payment.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/transactions")
 @RequiredArgsConstructor
 public class AdminController {
+    private final TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<?> getAllTransactions() {
-        return ResponseEntity.ok("All transactions");
+    public ResponseEntity<List<TransactionDto>> getAllTransactions() {
+        return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
     @GetMapping("/approval")

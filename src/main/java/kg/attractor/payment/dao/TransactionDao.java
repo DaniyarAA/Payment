@@ -25,4 +25,9 @@ public class TransactionDao {
         jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount(),
                 transaction.getStatus(),transaction.getCreatedAt());
     }
+
+    public List<Transaction> getAllTransactions() {
+        String sql = "SELECT * FROM transactions";
+        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Transaction.class));
+    }
 }

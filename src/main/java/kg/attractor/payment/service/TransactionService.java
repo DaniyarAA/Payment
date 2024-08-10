@@ -9,4 +9,6 @@ public interface TransactionService {
     List<TransactionDto> getHistory(Long accountId);
 
     void makeTransaction(SendMoneyDto sendMoneyDto);
+
+    List<TransactionDto> getAllTransactions();
 }

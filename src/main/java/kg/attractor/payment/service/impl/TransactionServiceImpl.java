@@ -77,6 +77,22 @@ public class TransactionServiceImpl implements TransactionService {
         transactionDao.saveTransaction(transaction);
     }
 
+
+    @Override
+    public List<TransactionDto> getAllTransactions(){
+        var list = transactionDao.getAllTransactions();
+        return list.stream()
+                .map(e -> TransactionDto.builder()
+                        .id(e.getId())
+                        .senderId(e.getSenderId())
+                        .receiverId(e.getReceiverId())
+                        .amount(e.getAmount())
+                        .status(e.getStatus())
+                        .createdAt(e.getCreatedAt())
+                        .build())
+                .toList();
+    }
+
     private Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userDao.getUserByPhoneNumber(auth.getName()).orElseThrow(
