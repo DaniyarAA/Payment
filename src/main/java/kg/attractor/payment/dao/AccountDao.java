@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -31,5 +32,10 @@ public class AccountDao {
     public void updateAccount(Account account) {
         String sql = "UPDATE accounts SET balance = ? WHERE id = ?";
         jdbcTemplate.update(sql, account.getBalance(), account.getId());
+    }
+
+    public List<Account> getAllAccounts() {
+        String sql = "SELECT * FROM accounts";
+        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Account.class));
     }
 }

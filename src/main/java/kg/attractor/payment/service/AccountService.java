@@ -1,6 +1,9 @@
 package kg.attractor.payment.service;
 
+import kg.attractor.payment.dto.AccountDto;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountService {
 
@@ -9,4 +12,6 @@ public interface AccountService {
     BigDecimal getBalance(String accountNumber);
 
     void addBalance(String accountNumber, BigDecimal money);
+
+    List<AccountDto> getAccounts();
 }

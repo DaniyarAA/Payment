@@ -1,5 +1,6 @@
 package kg.attractor.payment.controller;
 
+import kg.attractor.payment.dto.AccountDto;
 import kg.attractor.payment.model.Account;
 import kg.attractor.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @RestController
@@ -35,7 +37,7 @@ public class AccountController {
 
 
     @GetMapping
-    public ResponseEntity<?> getUserAccounts() {
-        return ResponseEntity.status(HttpStatus.OK).body("Accounts...");
+    public ResponseEntity<List<AccountDto>> getUserAccounts() {
+        return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccounts());
     }
 }

@@ -2,6 +2,7 @@ package kg.attractor.payment.service.impl;
 
 import kg.attractor.payment.dao.AccountDao;
 import kg.attractor.payment.dao.UserDao;
+import kg.attractor.payment.dto.AccountDto;
 import kg.attractor.payment.errors.NotFoundAccountException;
 import kg.attractor.payment.errors.NotFoundUserException;
 import kg.attractor.payment.model.Account;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -57,6 +59,19 @@ public class AccountServiceImpl implements AccountService {
 
         account.setBalance(account.getBalance().add(money));
         accountDao.updateAccount(account);
+    }
+
+
+    @Override
+    public List<AccountDto> getAccounts(){
+        var list = accountDao.getAllAccounts();
+
+        return list.stream()
+                .map(e -> AccountDto.builder()
+                        .accountNumber(e.getAccountNumber())
+                        .currency(e.getCurrency())
+                        .build())
+                .toList();
     }
 
 

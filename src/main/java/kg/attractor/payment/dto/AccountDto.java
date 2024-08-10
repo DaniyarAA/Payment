@@ -9,9 +9,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDto {
-    private Long id;
     private String accountNumber;
-    private Long userId;
     private String currency;
-    private BigDecimal balance;
 }
