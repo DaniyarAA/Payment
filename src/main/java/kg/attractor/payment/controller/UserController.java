@@ -3,6 +3,7 @@ package kg.attractor.payment.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.payment.dto.UserDto;
+import kg.attractor.payment.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid UserDto userDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        userService.createUser(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User is created");
     }
 }
