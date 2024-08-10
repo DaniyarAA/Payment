@@ -6,6 +6,7 @@ import kg.attractor.payment.dao.TransactionDao;
 import kg.attractor.payment.dao.UserDao;
 import kg.attractor.payment.dto.SendMoneyDto;
 import kg.attractor.payment.dto.TransactionDto;
+import kg.attractor.payment.errors.InsufficientFundsException;
 import kg.attractor.payment.errors.NotFoundAccountException;
 import kg.attractor.payment.errors.NotFoundTransactionException;
 import kg.attractor.payment.errors.NotFoundUserException;
@@ -117,7 +118,7 @@ public class TransactionServiceImpl implements TransactionService {
         Account receiverAccount = accountDao.getAccountById(transaction.getReceiverId())
                 .orElseThrow(() -> new NotFoundAccountException("Not found receiver account number"));
         if (receiverAccount.getBalance().compareTo(transaction.getAmount()) < 0) {
-            throw new RuntimeException("Insufficient funds in recipient's account for rollback");
+            throw new InsufficientFundsException("Insufficient funds in recipient's account for rollback");
         }
 
         receiverAccount.setBalance(receiverAccount.getBalance().subtract(transaction.getAmount()));
