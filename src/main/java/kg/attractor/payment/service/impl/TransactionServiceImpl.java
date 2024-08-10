@@ -111,8 +111,6 @@ public class TransactionServiceImpl implements TransactionService {
         if (senderAccount.getBalance().compareTo(transaction.getAmount()) < 0) {
             throw new RuntimeException("Insufficient funds in the sender's account");
         }
-        senderAccount.setBalance(senderAccount.getBalance().subtract(transaction.getAmount()));
-        accountDao.updateAccount(senderAccount);
 
         receiverAccount.setBalance(receiverAccount.getBalance().add(transaction.getAmount()));
         accountDao.updateAccount(receiverAccount);
