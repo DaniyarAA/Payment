@@ -19,6 +19,12 @@ public class GlobalControllerAdvice {
 
     private final ErrorService errorService;
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponseBody> handleRuntimeException(RuntimeException e) {
+        return new ResponseEntity<>(errorService.makeResponse(e), HttpStatus.NOT_FOUND);
+    }
+
+
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorResponseBody> handleNoSuchElementException(NoSuchElementException e) {
         return new ResponseEntity<>(errorService.makeResponse(e), HttpStatus.NOT_FOUND);

@@ -1,5 +1,6 @@
 package kg.attractor.payment.dao;
 
+import kg.attractor.payment.errors.UserExistsException;
 import kg.attractor.payment.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
@@ -20,9 +21,9 @@ public class UserDao {
         Integer count = jdbcTemplate.queryForObject(checkPhoneNumberSql, Integer.class, user.getPhoneNumber());
 
         if (count != null && count > 0) {
-            throw new IllegalArgumentException("Phone number already exists: " + user.getPhoneNumber());
+            throw new UserExistsException("Phone number already exists: " + user.getPhoneNumber());
         }
-        String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, account_type, enabled, authority_id ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into users (name, password, phone_number, enabled, authority_id ) values (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 user.getName(),
                 user.getPassword(),
