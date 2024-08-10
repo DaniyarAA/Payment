@@ -18,22 +18,25 @@ import java.util.List;
 public class AdminController {
     private final TransactionService transactionService;
 
+
     @GetMapping
     public ResponseEntity<List<TransactionDto>> getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
+
 
     @GetMapping("/approval")
     public ResponseEntity<List<TransactionDto>> getPendingTransactions() {
         return ResponseEntity.ok(transactionService.getPendingTransactions());
     }
 
-    //проверить
+
     @PostMapping("/approval")
     public ResponseEntity<?> approveTransaction(@RequestParam Long transactionId) {
         transactionService.approveTransaction(transactionId);
         return ResponseEntity.ok("Transaction approved");
     }
+
 
     @PostMapping("/rollback")
     public ResponseEntity<?> rollbackTransaction(@RequestParam Long transactionId) {
@@ -44,10 +47,9 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         } catch (NotFoundTransactionException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while rolling back the transaction");
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTransaction(@PathVariable long id) {

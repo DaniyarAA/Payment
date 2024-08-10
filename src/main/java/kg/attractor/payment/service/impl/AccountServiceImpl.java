@@ -26,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void createAccount(String currency) {
-        if (!currency.equals("USD") || !currency.equals("KGS")) {
+        if (!currency.equals("USD") && !currency.equals("KGS")) {
             throw new RuntimeException("Invalid currency");
         }
         Account account = Account.builder()
@@ -43,6 +43,9 @@ public class AccountServiceImpl implements AccountService {
     public BigDecimal getBalance(String accountNumber){
         Account account = accountDao.getByAccountNumber(accountNumber)
                 .orElseThrow(() -> new NotFoundAccountException("Account not found"));
+        if (!account.getUserId().equals(getCurrentUserId())) {
+            throw new IllegalArgumentException("You can't check someone else's account");
+        }
         return account.getBalance();
     }
 

@@ -18,22 +18,26 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
 
+
     @PostMapping
     public ResponseEntity<String> createAccount(@RequestParam String currency) {
         accountService.createAccount(currency);
         return ResponseEntity.status(HttpStatus.CREATED).body("Account created successfully");
     }
 
+
     @GetMapping("/balance")
     public ResponseEntity<?> getBalance(@RequestParam String accountNumber) {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.getBalance(accountNumber));
     }
+
 
     @PostMapping("/balance")
     public ResponseEntity<?> addBalance(@RequestParam String accountNumber, @RequestParam BigDecimal money) {
         accountService.addBalance(accountNumber, money);
         return ResponseEntity.status(HttpStatus.OK).body("Balance updated successfully");
     }
+
 
 
     @GetMapping

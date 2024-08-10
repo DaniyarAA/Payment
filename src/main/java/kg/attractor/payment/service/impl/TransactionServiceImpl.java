@@ -35,6 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> getHistory(Long accountId){
+        accountDao.getAccountById(accountId).orElseThrow(() -> new NotFoundAccountException("Account not found"));
         var list = transactionDao.getHistory(accountId);
         return list.stream()
                 .map(e -> TransactionDto.builder()
@@ -66,18 +67,27 @@ public class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Insufficient funds in sender's account");
         }
 
-        senderAccount.setBalance(senderAccount.getBalance().subtract(sendMoneyDto.getAmount()));
+        if (senderAccount.getCurrency() != receiverAccount.getCurrency()){
+            throw new RuntimeException("Currencies of the accounts do not match");
+        }
 
+        String transactionStatus;
+        if (sendMoneyDto.getAmount().compareTo(BigDecimal.TEN) > 0) {
+            transactionStatus = "PENDING";
+        } else {
+            transactionStatus = "COMPLETED";
+            senderAccount.setBalance(senderAccount.getBalance().subtract(sendMoneyDto.getAmount()));
+            receiverAccount.setBalance(receiverAccount.getBalance().add(sendMoneyDto.getAmount()));
 
-        accountDao.updateAccount(senderAccount);
-        accountDao.updateAccount(receiverAccount);
-
+            accountDao.updateAccount(senderAccount);
+            accountDao.updateAccount(receiverAccount);
+        }
 
         Transaction transaction = Transaction.builder()
                 .senderId(senderAccount.getId())
                 .receiverId(receiverAccount.getId())
                 .amount(sendMoneyDto.getAmount())
-                .status(sendMoneyDto.getAmount().compareTo(BigDecimal.TEN) > 0 ? "PENDING" : "COMPLETED")
+                .status(transactionStatus)
                 .createdAt(LocalDateTime.now())
                 .build();
         transactionDao.saveTransaction(transaction);
@@ -112,6 +122,9 @@ public class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Insufficient funds in the sender's account");
         }
 
+        senderAccount.setBalance(senderAccount.getBalance().subtract(transaction.getAmount()));
+        accountDao.updateAccount(senderAccount);
+
         receiverAccount.setBalance(receiverAccount.getBalance().add(transaction.getAmount()));
         accountDao.updateAccount(receiverAccount);
 
@@ -133,11 +146,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         if(transaction.getStatus().equals("COMPLETED")){
             receiverAccount.setBalance(receiverAccount.getBalance().subtract(transaction.getAmount()));
+            senderAccount.setBalance(senderAccount.getBalance().add(transaction.getAmount()));
+            accountDao.updateAccount(senderAccount);
+            accountDao.updateAccount(receiverAccount);
+        } else if(transaction.getStatus().equals("DELETED")){
+            throw new RuntimeException("transaction status is DELETED");
+        } else if(transaction.getStatus().equals("ROLLED_BACK")){
+            throw new RuntimeException("transaction status is ROLLED_BACK");
         }
-        senderAccount.setBalance(senderAccount.getBalance().add(transaction.getAmount()));
-
-        accountDao.updateAccount(senderAccount);
-        accountDao.updateAccount(receiverAccount);
 
         transactionDao.updateTransactionStatus(transactionId, "ROLLED_BACK");
 

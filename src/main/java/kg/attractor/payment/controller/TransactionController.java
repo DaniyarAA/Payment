@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.*;
 public class TransactionController {
     private final TransactionService transactionService;
 
+
     @GetMapping("/{accountId}/history")
     public ResponseEntity<?> getTransactionHistory(@PathVariable Long accountId) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.getHistory(accountId));
     }
 
+
+    // По логике если больше 10 отправить то списываются только после подтвержелия
     @PostMapping
     public ResponseEntity<?> performTransaction(@RequestBody SendMoneyDto sendMoneyDto) {
         transactionService.makeTransaction(sendMoneyDto);
