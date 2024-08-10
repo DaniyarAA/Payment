@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void makeTransaction(SendMoneyDto sendMoneyDto){
-        Account senderAccount = accountDao.getByAccountNumber(sendMoneyDto.getReceiverAccountNumber())
+        Account senderAccount = accountDao.getByAccountNumber(sendMoneyDto.getSenderAccountNumber())
                 .orElseThrow(() -> new NotFoundAccountException("Not found sender account number"));
         Account receiverAccount = accountDao.getByAccountNumber(sendMoneyDto.getReceiverAccountNumber())
                 .orElseThrow(() -> new NotFoundAccountException("Not found receiver account number"));
@@ -69,10 +69,10 @@ public class TransactionServiceImpl implements TransactionService {
         senderAccount.setBalance(senderAccount.getBalance().subtract(sendMoneyDto.getAmount()));
         receiverAccount.setBalance(receiverAccount.getBalance().add(sendMoneyDto.getAmount()));
 
-        if (sendMoneyDto.getAmount().compareTo(BigDecimal.TEN) <= 0) {
-            accountDao.updateAccount(senderAccount);
-            accountDao.updateAccount(receiverAccount);
-        }
+
+        accountDao.updateAccount(senderAccount);
+        accountDao.updateAccount(receiverAccount);
+
 
         Transaction transaction = Transaction.builder()
                 .senderId(senderAccount.getId())
@@ -105,7 +105,20 @@ public class TransactionServiceImpl implements TransactionService {
        if(!transaction.getStatus().equals("PENDING")){
            throw new RuntimeException("Transaction is not PENDING");
        }
-       transactionDao.updateTransactionStatus(transactionId, "COMPLETED");
+        Account senderAccount = accountDao.getAccountById(transaction.getSenderId())
+                .orElseThrow(() -> new NotFoundAccountException("Not found sender account number"));
+        Account receiverAccount = accountDao.getAccountById(transaction.getReceiverId())
+                .orElseThrow(() -> new NotFoundAccountException("Not found receiver account number"));
+        if (senderAccount.getBalance().compareTo(transaction.getAmount()) < 0) {
+            throw new RuntimeException("Insufficient funds in the sender's account");
+        }
+        senderAccount.setBalance(senderAccount.getBalance().subtract(transaction.getAmount()));
+        accountDao.updateAccount(senderAccount);
+
+        receiverAccount.setBalance(receiverAccount.getBalance().add(transaction.getAmount()));
+        accountDao.updateAccount(receiverAccount);
+
+        transactionDao.updateTransactionStatus(transactionId, "COMPLETED");
     }
 
 
