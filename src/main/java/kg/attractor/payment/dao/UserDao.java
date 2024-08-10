@@ -2,8 +2,12 @@ package kg.attractor.payment.dao;
 
 import kg.attractor.payment.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -25,6 +29,13 @@ public class UserDao {
                 user.getPhoneNumber(),
                 user.getEnabled(),
                 user.getAuthorityId()
+        );
+    }
+
+    public Optional<User> getUserByPhoneNumber(String phoneNumber){
+        String sql = "select * from users where phone_number = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), phoneNumber))
         );
     }
 }

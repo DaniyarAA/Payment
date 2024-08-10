@@ -31,15 +31,15 @@ public class SecurityConfig {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         String fetchUsers = """
-                select email, password, enabled
+                select phone_number, password, enabled
                 from users
-                where email = ?;
+                where phone_number = ?;
                 """;
         String fetchAuthorities = """
-                select email, authority
+                select phone_number, authority
                 from authorities a, users u
                 where u.authority_id = a.id
-                and EMAIL = ?;
+                and phone_number = ?;
                 """;
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
