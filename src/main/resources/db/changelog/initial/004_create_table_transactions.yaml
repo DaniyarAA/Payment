@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: author
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: Long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: sender_id
+                  type: Long
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_transactions_sender_id
+                    references: accounts(id)
+              - column:
+                  name: receiver_id
+                  type: Long
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_transactions_receiver_id
+                    references: accounts(id)
+              - column:
+                  name: amount
+                  type: DECIMAL(19, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008
+      author: Daniiar
+      changes:
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: currency
+                  value: "USD"
+              - column:
+                  name: balance
+                  valueNumeric: 1000.00
+              - column:
+                  name: account_number
+                  value: "123456789"
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: currency
+                  value: "USD"
+              - column:
+                  name: balance
+                  valueNumeric: 500.00
+              - column:
+                  name: account_number
+                  value: "987654321"

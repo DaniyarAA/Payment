@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007
+      author: Daniiar
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: phone_number
+                  value: "12345"
+              - column:
+                  name: name
+                  value: "Admin"
+              - column:
+                  name: password
+                  value: "$2a$12$yySgzJ.qlIDETi4MXObib.4MdWrSquHAtL0fhHLwxZd3rH3UNhgOK"
+              - column:
+                  name: enabled
+                  valueBoolean: true
+              - column:
+                  name: authority_id
+                  valueNumeric: 1
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: phone_number
+                  value: "996987654321"
+              - column:
+                  name: name
+                  value: "User"
+              - column:
+                  name: password
+                  value: "$2a$12$yySgzJ.qlIDETi4MXObib.4MdWrSquHAtL0fhHLwxZd3rH3UNhgOK"
+              - column:
+                  name: enabled
+                  valueBoolean: true
+              - column:
+                  name: authority_id
+                  valueNumeric: 2

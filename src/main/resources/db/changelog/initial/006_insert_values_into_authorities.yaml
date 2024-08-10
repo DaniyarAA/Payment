@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006
+      author: Daniiar
+      changes:
+        - insert:
+            tableName: authorities
+            columns:
+              - column:
+                  name: authority
+                  value: "ADMIN"
+              - column:
+                  name: id
+                  valueNumeric: 1
+        - insert:
+            tableName: authorities
+            columns:
+              - column:
+                  name: authority
+                  value: "USER"
+              - column:
+                  name: id
+                  valueNumeric: 2

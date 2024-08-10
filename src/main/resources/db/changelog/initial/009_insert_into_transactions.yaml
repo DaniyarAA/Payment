@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009
+      author: Daniiar
+      changes:
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: sender_id
+                  valueNumeric: 1
+              - column:
+                  name: receiver_id
+                  valueNumeric: 2
+              - column:
+                  name: amount
+                  valueNumeric: 50.00
+              - column:
+                  name: status
+                  value: "COMPLETED"
+              - column:
+                  name: created_at
+                  valueDate: "2024-08-10 10:00:00"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: sender_id
+                  valueNumeric: 2
+              - column:
+                  name: receiver_id
+                  valueNumeric: 1
+              - column:
+                  name: amount
+                  valueNumeric: 25.00
+              - column:
+                  name: status
+                  value: "PENDING"
+              - column:
+                  name: created_at
+                  valueDate: "2024-08-10 11:00:00"

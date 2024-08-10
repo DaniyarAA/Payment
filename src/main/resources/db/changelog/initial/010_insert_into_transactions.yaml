@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: Daniiar
+      changes:
+        - insert:
+            tableName: rollback_logs
+            columns:
+              - column:
+                  name: transaction_id
+                  valueNumeric: 1
+              - column:
+                  name: admin_id
+                  valueNumeric: 1
+              - column:
+                  name: action
+                  value: "ROLLBACK"
+              - column:
+                  name: timestamp
+                  valueDate: "2024-08-10 12:00:00"
