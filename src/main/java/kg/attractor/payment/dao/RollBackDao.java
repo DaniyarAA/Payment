@@ -11,7 +11,7 @@ public class RollBackDao {
     private final JdbcTemplate jdbcTemplate;
 
     public void save(RollbackLog log) {
-        String sql = "INSERT INTO transaction_logs (transaction_id, admin_id, action, timestamp) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO rollback_logs (transaction_id, admin_id, action, timestamp) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, log.getTransactionId(), log.getAdminId(), log.getAction(), log.getTimestamp());
     }
 }
