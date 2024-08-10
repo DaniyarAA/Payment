@@ -21,12 +21,13 @@ public class AdminController {
     }
 
     @GetMapping("/approval")
-    public ResponseEntity<?> getPendingTransactions() {
-        return ResponseEntity.ok("pending transactions");
+    public ResponseEntity<List<TransactionDto>> getPendingTransactions() {
+        return ResponseEntity.ok(transactionService.getPendingTransactions());
     }
 
+    //проверить
     @PostMapping("/approval")
-    public ResponseEntity<?> approveTransaction() {
+    public ResponseEntity<?> approveTransaction(@RequestParam Long transactionId) {
         return ResponseEntity.ok("Transaction approved");
     }
 

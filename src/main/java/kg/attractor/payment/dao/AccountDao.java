@@ -29,6 +29,13 @@ public class AccountDao {
         );
     }
 
+    public Optional<Account> getAccountById(Long id) {
+        String sql = "SELECT * FROM accounts WHERE id = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Account.class),id))
+        );
+    }
+
     public void updateAccount(Account account) {
         String sql = "UPDATE accounts SET balance = ? WHERE id = ?";
         jdbcTemplate.update(sql, account.getBalance(), account.getId());

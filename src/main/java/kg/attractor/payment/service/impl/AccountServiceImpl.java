@@ -26,6 +26,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void createAccount(String currency) {
+        if (!currency.equals("USD") || !currency.equals("KGS")) {
+            throw new RuntimeException("Invalid currency");
+        }
         Account account = Account.builder()
                 .accountNumber(generateAccountNumber())
                 .userId(getCurrentUserId())

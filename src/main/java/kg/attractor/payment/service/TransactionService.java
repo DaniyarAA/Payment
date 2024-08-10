@@ -11,4 +11,12 @@ public interface TransactionService {
     void makeTransaction(SendMoneyDto sendMoneyDto);
 
     List<TransactionDto> getAllTransactions();
+
+    List<TransactionDto> getPendingTransactions();
+
+    void approveTransaction(Long transactionId);
+
+    void rollBackTransaction(Long transactionId);
+
+    void deleteTransaction(Long transactionId);
 }
