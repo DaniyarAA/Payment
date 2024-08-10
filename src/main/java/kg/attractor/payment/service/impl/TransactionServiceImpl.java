@@ -67,7 +67,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         senderAccount.setBalance(senderAccount.getBalance().subtract(sendMoneyDto.getAmount()));
-        receiverAccount.setBalance(receiverAccount.getBalance().add(sendMoneyDto.getAmount()));
 
 
         accountDao.updateAccount(senderAccount);
@@ -134,7 +133,9 @@ public class TransactionServiceImpl implements TransactionService {
             throw new InsufficientFundsException("Insufficient funds in recipient's account for rollback");
         }
 
-        receiverAccount.setBalance(receiverAccount.getBalance().subtract(transaction.getAmount()));
+        if(transaction.getStatus().equals("COMPLETED")){
+            receiverAccount.setBalance(receiverAccount.getBalance().subtract(transaction.getAmount()));
+        }
         senderAccount.setBalance(senderAccount.getBalance().add(transaction.getAmount()));
 
         accountDao.updateAccount(senderAccount);
